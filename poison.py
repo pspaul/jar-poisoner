@@ -164,7 +164,6 @@ def main():
             for arg in args.template_args:
                 key, value = arg.split('=', 1)
                 PAYLOAD = PAYLOAD.format(**{key: value})
-        return
     
     poison_jar(args.input, args.output)
 
