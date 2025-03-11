@@ -119,16 +119,17 @@ def poison_jar(input_jar, output_jar):
     output_jar = ZipFile(output_jar, 'w')
     temp_dir = tempfile.TemporaryDirectory()
 
-    for entry in input_jar.infolist():
+    n = len(input_jar.infolist())
+    for i, entry in enumerate(input_jar.infolist()):
         if entry.is_dir():
-            print(f'Dir {entry.filename}')
+            print(f'{i}/{n} Dir {entry.filename}')
             output_jar.mkdir(entry.filename)
         elif entry.filename.endswith('.class') and not entry.filename.endswith('package-info.class'):
-            print(f'Poisoning {entry.filename}')
+            print(f'{i}/{n} Poisoning {entry.filename}')
             poisoned_class = create_poisoned_class(temp_dir.name, entry.filename)
             output_jar.writestr(entry, poisoned_class)
         else:
-            print(f'Copying {entry.filename}')
+            print(f'{i}/{n} Copying {entry.filename}')
             output_jar.writestr(entry, input_jar.read(entry))
 
 def main():
